@@ -1,0 +1,26 @@
+name: ammp-tunnel
+version: '1.2'
+summary: Set up SSH tunnel to AMMP gateway et.ammp.io
+description: |
+  This snap sets up an SSH tunnel to the AMMP gateway, to be used for reverse access
+  to edge devices.
+
+architectures:
+  - all
+
+grade: stable
+confinement: strict
+
+parts:
+  sshtunnel:
+    source: sshtunnel/
+    plugin: dump
+    stage-packages:
+    - libc6
+    - openssh-client
+
+apps:
+  sshtunnel:
+    command: tunnel.sh
+    daemon: simple
+    plugs: [network]
