@@ -10,8 +10,10 @@ confinement: strict
 
 parts:
   sshtunnel:
-    source: sshtunnel/
     plugin: dump
+    source: sshtunnel/
+    prepare: |
+      chmod 600 id_ed25519_remote
     stage-packages:
     - openssh-client
 
