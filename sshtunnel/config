@@ -4,3 +4,4 @@ REMOTE=et.ammp.io
 PORT=8080
 KNOWN_HOSTS="$SNAP"/known_hosts
 PRIV_KEY="$SNAP"/id_ed25519_remote
+AUTOSSH_GATETIME=0

@@ -16,9 +16,10 @@ parts:
       chmod 600 id_ed25519_remote
     stage-packages:
     - openssh-client
+    - autossh
 
 apps:
   sshtunnel:
     command: tunnel.sh
-    daemon: simple
+    daemon: forking
     plugs: [network]
