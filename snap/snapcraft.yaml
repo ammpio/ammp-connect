@@ -1,5 +1,5 @@
 name: ammp-connect
-version: '1.3'
+version: '1.4'
 summary: Set up SSH tunnel to AMMP gateway et.ammp.io
 description: |
   This snap sets up an SSH tunnel to the AMMP gateway, to be used for reverse access
