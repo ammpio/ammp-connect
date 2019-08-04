@@ -18,7 +18,7 @@ parts:
   sshtunnel:
     plugin: dump
     source: sshtunnel/
-    prepare: |
+    override-build: |
       chmod 600 id_ed25519_remote
     stage-packages:
     - openssh-client
