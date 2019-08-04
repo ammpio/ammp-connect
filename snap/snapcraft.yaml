@@ -20,6 +20,7 @@ parts:
     source: sshtunnel/
     override-build: |
       chmod 600 id_ed25519_remote
+      snapcraftctl build
     stage-packages:
     - openssh-client
     - autossh
