@@ -8,6 +8,12 @@ description: |
 grade: stable
 confinement: strict
 
+base: core18
+
+architectures:
+  - build-on: amd64
+  - build-on: armhf
+
 parts:
   sshtunnel:
     plugin: dump
