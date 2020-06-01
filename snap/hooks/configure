@@ -16,9 +16,6 @@ WG_LOCAL_IP="10.$((16#${MAC:6:2})).$((16#${MAC:8:2})).$((16#${MAC:10:2}))"
 # Generate 32-byte WireGuard private key base64
 WG_LOCAL_PRIVKEY=$(printf "%32s" "$MAC" | base64)
 
-# Generate WireGuard public key
-WG_LOCAL_PUBKEY=$(echo $WG_PRIVKEY | wg pubkey)
-
 # WireGuard remote endpoint parameters
 WG_REMOTE_PUBKEY='uneWvIm34XIkPyDP58XMZ1Ftsg7SzFVMt4EQeotJcRA='
 WG_REMOTE_IP=10.255.255.254
@@ -37,3 +34,5 @@ AllowedIPs = $WG_REMOTE_IP/32
 Endpoint = $WG_REMOTE_HOST:$WG_REMOTE_PORT
 PersistentKeepalive = 25
 EOL
+
+chmod 600 $SNAP_COMMON/wg0.conf
