@@ -20,11 +20,12 @@ apps:
     daemon: simple
     plugs: [network]
   wg-svc:
-    command: wg-quick up wg0
+    command: wg-quick up wg0 || true
     stop-command: wg-quick down wg0
     daemon: oneshot
     plugs: [network, network-control, network-bind, firewall-control]
     environment:
+      WG_SOCKET_DIR: $SNAP_DATA/socket
       WG_ENDPOINT_RESOLUTION_RETRIES: infinity
   wg:
     command: wg
