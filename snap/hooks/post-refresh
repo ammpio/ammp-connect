@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # If tun.conf file is empty or does not exist, populate as needed.
 # See https://forum.snapcraft.io/t/raspberry-pi-3-ubuntu-core-18-network-control-interface-issue/14773/7
