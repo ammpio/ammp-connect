@@ -2,8 +2,8 @@ name: ammp-connect
 version: '1.4'
 summary: Set up SSH tunnel to AMMP gateway et.ammp.io
 description: |
-  This snap sets up an SSH tunnel to the AMMP gateway, to be used for reverse access
-  to edge devices.
+  This snap sets up an SSH tunnel and a WireGuard connection to the AMMP gateway, to be used for
+  reverse access to edge devices.
 
 grade: stable
 confinement: strict
@@ -13,6 +13,34 @@ base: core18
 architectures:
   - build-on: amd64
   - build-on: armhf
+
+apps:
+  sshtunnel:
+    command: tunnel.sh
+    daemon: simple
+    plugs: [network]
+  wireguard-svc:
+    command: wg-quick up wg0
+    stop-command: wg-quick down wg0
+    daemon: oneshot
+    plugs: [network, network-control, network-bind, firewall-control]
+    environment:
+      WG_ENDPOINT_RESOLUTION_RETRIES: infinity
+  wg:
+    command: wg
+    plugs: [network, network-control, network-bind, firewall-control]
+    environment:
+      WG_SOCKET_DIR: $SNAP_DATA/socket
+  wg-quick:
+    command: wg-quick
+    plugs: [network, network-control, network-bind, firewall-control]
+    environment:
+      WG_SOCKET_DIR: $SNAP_DATA/socket
+  wireguard-go:
+    command: wireguard-go
+    plugs: [network, network-control, network-bind, firewall-control]
+    environment:
+      WG_SOCKET_DIR: $SNAP_DATA/socket
 
 parts:
   sshtunnel:
@@ -24,9 +52,33 @@ parts:
     stage-packages:
     - openssh-client
     - autossh
+  wireguard:
+    plugin: make
+    source-type: git
+    source: https://git.zx2c4.com/wireguard-tools
+    source-tag: v1.0.20200513
+    source-subdir: src/
+    build-packages:
+      - libmnl-dev
+      - build-essential
+    override-pull: |
+      snapcraftctl pull
+      patch -p1 < $SNAPCRAFT_PROJECT_DIR/tools.patch
+    stage-packages:
+      - libc6
+      - libmnl0
+      - resolvconf
+    make-parameters: [WITH_WGQUICK=yes]
+  wireguard-go:
+    plugin: make
+    source-type: git
+    source: git://git.zx2c4.com/wireguard-go
+    source-branch: v0.0.20200320
+    override-pull: |
+      snapcraftctl pull
+      patch -p1 < $SNAPCRAFT_PROJECT_DIR/svet.patch
+    build-snaps: [go]
 
-apps:
-  sshtunnel:
-    command: tunnel.sh
-    daemon: simple
-    plugs: [network]
+layout:
+  /etc/wireguard:
+    bind: $SNAP_COMMON

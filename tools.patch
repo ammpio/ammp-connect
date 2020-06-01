@@ -1,0 +1,49 @@
+diff --git a/src/ipc.c b/src/ipc.c
+index b9d2532..3867fa0 100644
+--- a/src/ipc.c
++++ b/src/ipc.c
+@@ -77,6 +77,17 @@ static int string_list_add(struct string_list *list, const char *str)
+ }
+ 
+ #ifndef WINCOMPAT
++
++char *socket_dir = NULL;
++
++static char *get_socket_dir()
++{
++	if (socket_dir == NULL) {
++		socket_dir = strdup(getenv("WG_SOCKET_DIR"));
++	}
++	return socket_dir;
++}
++
+ static FILE *userspace_interface_file(const char *iface)
+ {
+ 	struct stat sbuf;
+@@ -87,7 +98,7 @@ static FILE *userspace_interface_file(const char *iface)
+ 	errno = EINVAL;
+ 	if (strchr(iface, '/'))
+ 		goto out;
+-	ret = snprintf(addr.sun_path, sizeof(addr.sun_path), SOCK_PATH "%s" SOCK_SUFFIX, iface);
++	ret = snprintf(addr.sun_path, sizeof(addr.sun_path), "%s/%s%s", get_socket_dir(), iface, SOCK_SUFFIX);
+ 	if (ret < 0)
+ 		goto out;
+ 	ret = stat(addr.sun_path, &sbuf);
+@@ -129,7 +140,7 @@ static bool userspace_has_wireguard_interface(const char *iface)
+ 
+ 	if (strchr(iface, '/'))
+ 		return false;
+-	if (snprintf(addr.sun_path, sizeof(addr.sun_path), SOCK_PATH "%s" SOCK_SUFFIX, iface) < 0)
++	if (snprintf(addr.sun_path, sizeof(addr.sun_path), "%s/%s%s", get_socket_dir(), iface, SOCK_SUFFIX) < 0)
+ 		return false;
+ 	if (stat(addr.sun_path, &sbuf) < 0)
+ 		return false;
+@@ -156,7 +167,7 @@ static int userspace_get_wireguard_interfaces(struct string_list *list)
+ 	char *end;
+ 	int ret = 0;
+ 
+-	dir = opendir(SOCK_PATH);
++	dir = opendir(get_socket_dir());
+ 	if (!dir)
+ 		return errno == ENOENT ? 0 : -errno;
+ 	while ((ent = readdir(dir))) {
