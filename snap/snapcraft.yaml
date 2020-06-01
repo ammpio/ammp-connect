@@ -19,13 +19,13 @@ apps:
     command: tunnel.sh
     daemon: simple
     plugs: [network]
-  # wireguard-svc:
-  #   command: wg-quick up wg0
-  #   stop-command: wg-quick down wg0
-  #   daemon: oneshot
-  #   plugs: [network, network-control, network-bind, firewall-control]
-  #   environment:
-  #     WG_ENDPOINT_RESOLUTION_RETRIES: infinity
+  wg-svc:
+    command: wg-quick up wg0
+    stop-command: wg-quick down wg0
+    daemon: oneshot
+    plugs: [network, network-control, network-bind, firewall-control]
+    environment:
+      WG_ENDPOINT_RESOLUTION_RETRIES: infinity
   wg:
     command: wg
     plugs: [network, network-control, network-bind, firewall-control]
