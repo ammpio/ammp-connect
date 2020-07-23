@@ -20,6 +20,7 @@ apps:
     daemon: simple
     plugs: [network]
   wg-svc:
+    pre-command: check_wg_config.sh
     command: wg-quick up wg0 || true
     stop-command: wg-quick down wg0
     daemon: oneshot
@@ -51,8 +52,11 @@ parts:
       chmod 600 id_ed25519_remote
       snapcraftctl build
     stage-packages:
-    - openssh-client
-    - autossh
+      - openssh-client
+      - autossh
+  wg-scripts:
+    plugin: dump
+    source: wg-scripts/
   wireguard:
     plugin: make
     source-type: git

@@ -7,6 +7,14 @@ if [ ! -s /etc/modules-load.d/tun.conf ]; then
   echo 'tun' > /etc/modules-load.d/tun.conf
 fi
 
+# If wg0.conf exists, exit. Else generate it
+if [ -s $SNAP_COMMON/wg0.conf ]; then
+  echo 'wg0.conf exists; not generating'
+  exit 0
+fi
+
+echo 'Generating wg0.conf'
+
 # Get MAC ID
 MAC=$(cat /sys/class/net/eth0/address | sed s/://g)
 
