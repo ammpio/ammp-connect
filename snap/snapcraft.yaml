@@ -20,9 +20,8 @@ apps:
     daemon: simple
     plugs: [network]
   wg-svc:
-    pre-command: check_wg_config.sh
-    command: wg-quick up wg0 || true
-    stop-command: wg-quick down wg0
+    command: wg_svc_start.sh
+    stop-command: wg_svc_stop.sh
     daemon: oneshot
     plugs: [network, network-control, network-bind, firewall-control]
     environment:
