@@ -24,7 +24,7 @@ apps:
     stop-command: wg_svc_stop.sh
     daemon: oneshot
     restart-condition: on-failure
-    restart-delay: 120
+    restart-delay: 120s
     plugs: [network, network-control, network-bind, firewall-control]
     environment:
       WG_SOCKET_DIR: $SNAP_DATA/socket
