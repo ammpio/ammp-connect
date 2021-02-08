@@ -23,7 +23,7 @@ apps:
     command: wg_svc_start.sh
     stop-command: wg_svc_stop.sh
     daemon: oneshot
-    restart: on-failure
+    restart-condition: on-failure
     restart-delay: 120
     plugs: [network, network-control, network-bind, firewall-control]
     environment:
