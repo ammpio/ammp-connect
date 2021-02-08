@@ -62,7 +62,7 @@ parts:
     plugin: make
     source-type: git
     source: https://git.zx2c4.com/wireguard-tools
-    source-tag: v1.0.20200513
+    source-tag: v1.0.20200827
     source-subdir: src/
     build-packages:
       - libmnl-dev
@@ -78,8 +78,8 @@ parts:
   wireguard-go:
     plugin: make
     source-type: git
-    source: git://git.zx2c4.com/wireguard-go
-    source-branch: v0.0.20200320
+    source: https://git.zx2c4.com/wireguard-go
+    source-tag: 0.0.20200320
     override-pull: |
       snapcraftctl pull
       patch -p1 < $SNAPCRAFT_PROJECT_DIR/svet.patch
