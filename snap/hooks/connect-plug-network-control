@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+snapctl start --enable "ammp-connect.wg-svc"

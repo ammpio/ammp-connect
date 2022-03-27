@@ -27,6 +27,7 @@ apps:
     environment:
       WG_SOCKET_DIR: $SNAP_DATA/socket
       WG_ENDPOINT_RESOLUTION_RETRIES: infinity
+    install-mode: disable
   wg:
     command: wg
     plugs: [network, network-control, network-bind, firewall-control]
