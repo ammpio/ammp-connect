@@ -1,5 +1,5 @@
 name: ammp-connect
-version: '1.4'
+version: '1.5'
 summary: Set up SSH tunnel to AMMP gateway et.ammp.io
 description: |
   This snap sets up an SSH tunnel and a WireGuard connection to the AMMP gateway, to be used for
@@ -25,24 +25,17 @@ apps:
     daemon: oneshot
     plugs: [network, network-control, network-bind, firewall-control]
     environment:
-      WG_SOCKET_DIR: $SNAP_DATA/socket
       WG_ENDPOINT_RESOLUTION_RETRIES: infinity
     install-mode: disable
   wg:
     command: wg
     plugs: [network, network-control, network-bind, firewall-control]
-    environment:
-      WG_SOCKET_DIR: $SNAP_DATA/socket
   wg-quick:
     command: wg-quick
     plugs: [network, network-control, network-bind, firewall-control]
-    environment:
-      WG_SOCKET_DIR: $SNAP_DATA/socket
   wireguard-go:
     command: wireguard-go
     plugs: [network, network-control, network-bind, firewall-control]
-    environment:
-      WG_SOCKET_DIR: $SNAP_DATA/socket
 
 parts:
   sshtunnel:
@@ -57,31 +50,29 @@ parts:
   wg-scripts:
     plugin: dump
     source: wg-scripts/
-  wireguard:
+  wireguard-tools:
     plugin: make
     source-type: git
     source: https://git.zx2c4.com/wireguard-tools
-    source-tag: v1.0.20200513
+    source-tag: v1.0.20210914
     source-subdir: src/
     build-packages:
       - libmnl-dev
       - build-essential
-    override-pull: |
-      snapcraftctl pull
-      patch -p1 < $SNAPCRAFT_PROJECT_DIR/tools.patch
     stage-packages:
-      - libc6
       - libmnl0
       - resolvconf
-    make-parameters: [WITH_WGQUICK=yes]
+    make-parameters: 
+      - WITH_WGQUICK=yes
+      - RUNSTATEDIR=/run/snap.ammp-connect
   wireguard-go:
     plugin: make
     source-type: git
     source: https://git.zx2c4.com/wireguard-go
-    source-branch: 0.0.20200320
+    source-branch: 0.0.20220316
     override-pull: |
       snapcraftctl pull
-      patch -p1 < $SNAPCRAFT_PROJECT_DIR/svet.patch
+      patch -p1 < $SNAPCRAFT_PROJECT_DIR/wg_socket_dir.patch
     build-snaps: [go]
 
 layout:
