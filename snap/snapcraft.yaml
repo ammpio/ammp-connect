@@ -57,7 +57,7 @@ parts:
   wg-scripts:
     plugin: dump
     source: wg-scripts/
-  wireguard:
+  wireguard-tools:
     plugin: make
     source-type: git
     source: https://git.zx2c4.com/wireguard-tools
