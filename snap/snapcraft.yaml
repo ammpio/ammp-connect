@@ -23,19 +23,19 @@ apps:
     command: wg_svc_start.sh
     stop-command: wg_svc_stop.sh
     daemon: oneshot
-    plugs: [network, network-control, network-bind, firewall-control]
+    plugs: [network, network-bind, network-observe, network-control]
     environment:
       WG_ENDPOINT_RESOLUTION_RETRIES: infinity
     install-mode: disable
   wg:
     command: wg
-    plugs: [network, network-control, network-bind, firewall-control]
+    plugs: [network, network-bind, network-control]
   wg-quick:
     command: wg-quick
-    plugs: [network, network-control, network-bind, firewall-control]
+    plugs: [network-control]
   wireguard-go:
     command: wireguard-go
-    plugs: [network, network-control, network-bind, firewall-control]
+    plugs: [network, network-bind, network-control]
 
 parts:
   sshtunnel:
@@ -59,10 +59,7 @@ parts:
     build-packages:
       - libmnl-dev
       - build-essential
-    stage-packages:
-      - libmnl0
-      - resolvconf
-    make-parameters: 
+    make-parameters:
       - WITH_WGQUICK=yes
       - RUNSTATEDIR=/run/snap.ammp-connect
   wireguard-go:
