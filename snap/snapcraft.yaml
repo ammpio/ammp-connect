@@ -66,11 +66,7 @@ parts:
     build-packages:
       - libmnl-dev
       - build-essential
-#    override-pull: |
-#      snapcraftctl pull
-#      patch -p1 < $SNAPCRAFT_PROJECT_DIR/tools.patch
     stage-packages:
-#      - libc6
       - libmnl0
       - resolvconf
     make-parameters:
