@@ -16,11 +16,11 @@ architectures:
 
 apps:
   sshtunnel:
-    command: /bin/tunnel.sh
+    command: bin/tunnel.sh
     daemon: simple
     plugs: [network]
   wg-svc:
-    command: /bin/wg_svc_start.sh
+    command: bin/wg_svc_start.sh
     stop-command: bin/wg_svc_stop.sh
     daemon: oneshot
     plugs: [network, network-bind, network-observe, network-control]
@@ -28,13 +28,13 @@ apps:
       WG_ENDPOINT_RESOLUTION_RETRIES: infinity
     install-mode: disable
   wg:
-    command: /usr/bin/wg
+    command: usr/bin/wg
     plugs: [network, network-bind, network-control]
   wg-quick:
-    command: /usr/bin/wg-quick
+    command: usr/bin/wg-quick
     plugs: [network-control]
   wireguard-go:
-    command: /usr/bin/wireguard-go
+    command: usr/bin/wireguard-go
     plugs: [network, network-bind, network-control]
 
 parts:
