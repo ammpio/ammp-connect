@@ -8,7 +8,7 @@ description: |
 grade: stable
 confinement: strict
 
-base: core18
+base: core22
 
 architectures:
   - build-on: armhf
@@ -16,25 +16,25 @@ architectures:
 
 apps:
   sshtunnel:
-    command: tunnel.sh
+    command: /bin/tunnel.sh
     daemon: simple
     plugs: [network]
   wg-svc:
-    command: wg_svc_start.sh
-    stop-command: wg_svc_stop.sh
+    command: /bin/wg_svc_start.sh
+    stop-command: bin/wg_svc_stop.sh
     daemon: oneshot
     plugs: [network, network-bind, network-observe, network-control]
     environment:
       WG_ENDPOINT_RESOLUTION_RETRIES: infinity
     install-mode: disable
   wg:
-    command: wg
+    command: /usr/bin/wg
     plugs: [network, network-bind, network-control]
   wg-quick:
-    command: wg-quick
+    command: /usr/bin/wg-quick
     plugs: [network-control]
   wireguard-go:
-    command: wireguard-go
+    command: /usr/bin/wireguard-go
     plugs: [network, network-bind, network-control]
 
 parts:
@@ -43,7 +43,7 @@ parts:
     source: sshtunnel/
     override-build: |
       chmod 600 id_ed25519_remote
-      snapcraftctl build
+      craftctl default
     stage-packages:
       - openssh-client
       - autossh
@@ -68,8 +68,8 @@ parts:
     source: https://git.zx2c4.com/wireguard-go
     source-branch: 0.0.20220316
     override-pull: |
-      snapcraftctl pull
-      patch -p1 < $SNAPCRAFT_PROJECT_DIR/wg_socket_dir.patch
+      craftctl default
+      patch -p1 < $CRAFT_PROJECT_DIR/wg_socket_dir.patch
     build-snaps: [go]
 
 layout:
